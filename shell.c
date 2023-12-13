@@ -1,69 +1,40 @@
 #include "shell.h"
 
 /**
- * displayPrompt - Displays the shell prompt.
+ * main - creates a prompt that reads input, sparses it, executes and waits
+ * for another command unless told to exit
+ * @ac: number of arguemnets
+ * @av: array of arguements
+ * @env: environment variable
+ * Return: EXIT_SUCCESS
  */
-void displayPrompt(void)
+int main(int ac __attribute__((unused)), char **av, char **env)
 {
-    printf("myshell> ");
-}
+	char *line;
+	char **args, **path;
+	int count = 0, status = 0;
+	(void) av;
+	signal(SIGINT, handle_signal);
+	while (1)
+	{
+		prompt();
+		/*read input and return string*/
+		line = read_input();
+		/*separates string to get command and atgs*/
+		args = sparse_str(line, env);
 
-/**
- * main - The main function for the simple shell.
- *
- * Return: Always 0.
- */
-int main(void)
-{
-    char command[MAX_COMMAND_LENGTH];
-    pid_t pid;
-
-    while (1)
-    {
-        /* Display prompt and read user input */
-        displayPrompt();
-        if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
-        {
-            /* Handle end of file condition (Ctrl+D) */
-            printf("\n");
-            break;
-        }
-
-        /* Remove newline character from the input */
-        command[strcspn(command, "\n")] = '\0';
-
-        /* Fork a child process */
-        pid = fork();
-
-        if (pid < 0)
-        {
-            /* Forking error */
-            perror("Error forking");
-            exit(EXIT_FAILURE);
-        }
-        else if (pid == 0)
-        {
-            /* Child process */
-            executeCommand(command);
-        }
-        else
-        {
-            /* Parent process */
-            int status;
-            waitpid(pid, &status, 0);
-
-            if (WIFEXITED(status))
-            {
-                /* If child process exited normally */
-                printf("Command executed with status %d\n", WEXITSTATUS(status));
-            }
-            else if (WIFSIGNALED(status))
-            {
-                /* If child process terminated by a signal */
-                printf("Command terminated by signal %d\n", WTERMSIG(status));
-            }
-        }
-    }
-
-    return 0;
+		if ((_strcmp(args[0], "\n") != 0) && (_strcmp(args[0], "env") != 0))
+		{
+			count += 1;
+			path = search_path(env); /*busca PATH en la variable environ*/
+			status = _stat(args, path);
+			child_process(av, args, env, status, count);
+		}
+		else
+		{
+			free(args);
+		}
+		free(line);
+	}
+	return (EXIT_SUCCESS);
 }
