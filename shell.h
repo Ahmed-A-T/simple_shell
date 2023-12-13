@@ -22,5 +22,5 @@ void displayPrompt(void);
  */
 void executeCommand(char *command);
 
-#endif /* MYSHELL_H */
+#endif 
 

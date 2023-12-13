@@ -1,6 +1,14 @@
 #include "shell.h"
 
 /**
+ * displayPrompt - Displays the shell prompt.
+ */
+void displayPrompt(void)
+{
+    printf("myshell> ");
+}
+
+/**
  * main - The main function for the simple shell.
  *
  * Return: Always 0.
