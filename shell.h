@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+extern char **environ;  /* Declaration of the environment variable */
 void displayPrompt(void);
 
 #endif
