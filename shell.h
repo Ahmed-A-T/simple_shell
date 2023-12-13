@@ -1,17 +1,26 @@
 #ifndef SHELL_H
 #define SHELL_H
-#define MAX_COMMAND_LENGTH 100
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/stat.h>
-#include <errno.h>
 
-extern char **environ;  /* Declaration of the environment variable */
+extern char **environ;
+
+#define MAX_COMMAND_LENGTH 100
+
+/**
+ * displayPrompt - Displays the shell prompt.
+ */
 void displayPrompt(void);
 
-#endif
+/**
+ * executeCommand - Executes the given command in a child process.
+ * @command: The command to be executed.
+ */
+void executeCommand(char *command);
+
+#endif /* MYSHELL_H */
+
