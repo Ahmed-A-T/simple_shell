@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
 #include "shell.h"
-
-#define MAX_COMMAND_LENGTH 100
 
 /**
  * displayPrompt - Displays the shell prompt.
