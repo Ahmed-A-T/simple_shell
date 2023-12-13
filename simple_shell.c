@@ -1,50 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 #include "shell.h"
 
-/**
- * main - main arguments functions
- * @ac:count of argumnents
- * @av: arguments
- * @env: environment
- * Return: _exit = 0.
- */
-int main(int ac, char **av, char **env)
-{
-	char *getcommand = NULL, **user_command = NULL;
-	int pathValue = 0, _exit = 0, n = 0;
-	(void)ac;
+#define MAX_COMMAND_LENGTH 100
 
-	while (1)
-	{
-		getcommand = _getline_command();
-		if (getcommand)
-		{
-			pathValue++;
-			user_command = _get_token(getcommand);
-			if (!user_command)
-			{
-				free(getcommand);
-				continue;
-			}
-			if ((!_strcmp(user_command[0], "exit")) && user_command[1] == NULL)
-				_exit_command(user_command, getcommand, _exit);
-			if (!_strcmp(user_command[0], "env"))
-				_getenv(env);
-			else
-			{
-				n = _values_path(&user_command[0], env);
-				_exit = _fork_fun(user_command, av, env, getcommand, pathValue, n);
-				if (n == 0)
-					free(user_command[0]);
-			}
-			free(user_command);
-		}
-		else
-		{
-			if (isatty(STDIN_FILENO))
-				write(STDOUT_FILENO, "\n", 1);
-			exit(_exit);
-		}
-		free(getcommand);
-	}
-	return (_exit);
+/**
+ * displayPrompt - Displays the shell prompt.
+ */
+void displayPrompt(void)
+{
+    printf("myshell> ");
 }
+
+/**
+ * main - The main function for the simple shell.
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    char command[MAX_COMMAND_LENGTH];
+    pid_t pid;
+
+    while (1)
+    {
+        /* Display prompt and read user input */
+        displayPrompt();
+        if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
+        {
+            /* Handle end of file condition (Ctrl+D) */
+            printf("\n");
+            break;
+        }
+
+        /* Remove newline character from the input */
+        command[strcspn(command, "\n")] = '\0';
+
+        /* Fork a child process */
+        pid = fork();
+
+        if (pid < 0)
+        {
+            /* Forking error */
+            perror("Error forking");
+            exit(EXIT_FAILURE);
+        }
+        else if (pid == 0)
+        {
+            /* Child process */
+            execlp(command, command, (char *)NULL);
+
+            /* If execlp fails, print an error message */
+            perror("Error executing command");
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            /* Parent process */
+            int status;
+            waitpid(pid, &status, 0);
+
+            if (WIFEXITED(status))
+            {
+                /* If child process exited normally */
+                printf("Command executed with status %d\n", WEXITSTATUS(status));
+            }
+            else if (WIFSIGNALED(status))
+            {
+                /* If child process terminated by a signal */
+                printf("Command terminated by signal %d\n", WTERMSIG(status));
+            }
+        }
+    }
+
+    return 0;
+}
+
