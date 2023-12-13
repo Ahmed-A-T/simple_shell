@@ -3,7 +3,9 @@
 /**
  * _which - identifies the path of the command(*args) that is being passed
  * to it
+ *
  * @foundpath: the command that is being passed to it
+ *
  * Return: the complete path of the command or 0 on failure
  */
 char **_which(char *foundpath)
@@ -24,8 +26,8 @@ char **_which(char *foundpath)
 		return (NULL);
 	}
 
-	copy_path = _strdup(foundpath); /*copiar el string --> palabra PATH*/
-	tokens = strtok(copy_path, sparse); /*separar el string por un separador*/
+	copy_path = _strdup(foundpath);
+	tokens = strtok(copy_path, sparse);
 	while (tokens != NULL)
 	{
 		dir[i] = tokens;
@@ -39,11 +41,13 @@ char **_which(char *foundpath)
 
 /**
  * child_process - executes a command if the path of it is an executable file
+ *
  * @args: the command to be executed
  * @env: environment variable
  * @status_main: status variable
  * @av: name of program
  * @cnt: count of prompt
+ *
  * Return: 1
  */
 int child_process(char **av, char **args, char **env, int status_main, int cnt)

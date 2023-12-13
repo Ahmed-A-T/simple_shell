@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- *_calloc -allocated memoria for nmeb elemn de zise bytes
+ *_calloc - allocated memory for nmeb elemn de zise bytes
  *@nmemb: number of element in the array
  *@size: bytes for each position in the array
  *Return: pointer void
@@ -22,5 +22,4 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 		p[i] = 0;
 
 	return (p);
-
 }

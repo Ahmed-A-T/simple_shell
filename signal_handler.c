@@ -2,6 +2,7 @@
 
 /**
  * handle_signal - prints new line and prompt when CTRL + C is passed as input
+ *
  * @signal: name of sig
  */
 void handle_signal(int signal)
@@ -15,9 +16,11 @@ void handle_signal(int signal)
 
 /**
  * _error - prints the error output of a file
+ *
  * @argv: name of program
  * @count: number of prompt
  * @args: command to be put in
+ *
  * Return: 0 on success
  */
 int *_error(char *argv, int count, char *args)
@@ -38,8 +41,10 @@ int *_error(char *argv, int count, char *args)
 
 /**
  * _stat - get file status
+ *
  * @cmd: pointo with commands
  * @path: location of each directory
+ *
  * Return: 1 on success
  **/
 int _stat(char **cmd, char **path)
@@ -55,7 +60,6 @@ int _stat(char **cmd, char **path)
 		free(cmd);
 		return (0);
 	}
-
 	for (count = 0; path[count] != NULL ; count++)
 	{
 		conc_str = str_concat(path[count], "/");
