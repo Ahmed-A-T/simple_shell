@@ -1,6 +1,6 @@
 #ifndef SHELL_H
 #define SHELL_H
-#define _GNU_SOURCE
+#define MAX_COMMAND_LENGTH 100
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,5 +13,4 @@
 
 void displayPrompt(void);
 
-
-#endif /* SHELL_H */
+#endif
